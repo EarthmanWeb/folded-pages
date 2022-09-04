@@ -17,8 +17,8 @@ You will see it in your wp-admin pages list, wherever you have nested pages.
 
 ## Screenshots
 
-![Folded Pages - Screenshot 1](/images/screenshot-1.jpeg)
-![Folded Pages - Screenshot 2](/images/screenshot-2.jpeg)
+![Folded Pages - Screenshot 1](/images/screenshot-1.png)
+![Folded Pages - Screenshot 2](/images/screenshot-2.png)
 
 ## Development:
 
