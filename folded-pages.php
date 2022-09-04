@@ -4,7 +4,7 @@
  * Description:     Lightweight plugin that nests child pages for efficient wp-admin page management
  * Author:          Earthman Media - Terrance Orletsky
  * Author URI:      earthmanmedia.com
- * Text Domain:     folded_pages
+ * Text Domain:     folded-pages
  * Version:         1.0.0
  *
  * @package         Folded_Pages
@@ -26,3 +26,4 @@ require_once __DIR__ . '/classes/class-folded-pages-updater.php';
 $folded_pages_updater = new Folded_Pages_Updater( __FILE__ ); // instantiate our class.
 $folded_pages_updater->set_username( 'EarthmanWeb' ); // set username.
 $folded_pages_updater->set_repository( 'folded-pages' ); // set repo.
+$folded_pages_updater->initialize();

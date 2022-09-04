@@ -1,7 +1,7 @@
 <?php
 /**
  * Updater Class - manage updates from Github for the Folded Pages plugin
- * (modified from:) https://raw.githubusercontent.com/rayman813/smashing-updater-plugin/master/updater.php
+ * modified from: https://github.com/rayman813/smashing-updater-plugin
  *
  * @package Folded_Pages
  */
