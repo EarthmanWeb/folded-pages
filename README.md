@@ -21,15 +21,24 @@ phpcbf - version 3.7.1 (stable) by Squiz (http://www.squiz.net)
 
 ---
 #### Option A. Setup Code Formatting in VSCode
-##### 1. Install VSCode Extensions used for code formatting
+
+##### 1. Install the repo's phpc and phpcbf files
+```
+// change the path below to teh correct one for you
+cd /path/to/plugins/folded-pages/
+cd wpcs
+composer install
+```
+
+##### 2. Install VSCode Extensions used for code formatting
 Install the recommended extensions: 
 `/.vscode/extensions.json`
 
-##### 2. Install VSCode formatting settings:
+##### 3. Install VSCode formatting settings:
 Ensure you are using these workspace settings: 
 `/.vscode/folded-pages.code-workspace`
 
-##### 3. Override/Modify formatting rules:
+##### 4. Override/Modify formatting rules:
 To adjust code formatting rules, use the `phpcs.xml` file in the root of the project
 
 ---
