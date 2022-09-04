@@ -1,0 +1,8 @@
+{
+	"recommendations": [
+		"rifi2k.format-html-in-php",
+		"neilbrayfield.php-docblocker",
+		"simone-baldini.vscode-phpcbf",
+		"shevaua.phpcs",
+	]
+}

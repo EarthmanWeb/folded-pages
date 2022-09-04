@@ -1,0 +1,3 @@
+wpcs export-ignore
+.vscode export-ignore
+phpcs.xml export-ignore
