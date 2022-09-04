@@ -1,5 +1,5 @@
 # Folded Pages : WordPress Plugin
-
+![Folded Pages - Banner Image](/images/banner-mid.jpeg)
 ---
 ## Introduction:
 A lightweight WordPress plugin to view hierarchical pages more efficiently in the WP-Admin page listing
@@ -14,6 +14,12 @@ There are no settings / options, nor admin page.
 You will see it in your wp-admin pages list, wherever you have nested pages.
 
 ---
+
+## Screenshots
+
+![Folded Pages - Screenshot 1](/images/screenshot-1.jpeg)
+![Folded Pages - Screenshot 2](/images/screenshot-2.jpeg)
+
 ## Development:
 
 To make modifications to this plugin, you should clone (not download) the repo and submit pull requests targeted at the `main` branch
