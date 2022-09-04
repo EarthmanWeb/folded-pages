@@ -6,7 +6,10 @@ A lightweight WordPress plugin to view hierarchical pages more efficiently in th
 
 ## How to Use:
 
-- Upload to your WordPress site
+Download the latest release from:
+https://github.com/EarthmanWeb/folded-pages/releases
+
+- Copy / Upload to your WordPress site's plugins
 - Install
 - Activate
 
