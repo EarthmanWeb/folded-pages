@@ -1,4 +1,5 @@
 # Folded Pages : WordPress Plugin
+
 ---
 ## Introduction:
 A lightweight WordPress plugin to view hierarchical pages more efficiently in the WP-Admin page listing
@@ -15,9 +16,11 @@ You will see it in your wp-admin pages list, wherever you have nested pages.
 ---
 ## Development:
 
+To make modifications to this plugin, you should clone (not download) the repo and submit pull requests targeted at the `main` branch
+
 ##### Code Formatting Requirements:
-phpcs - version 3.7.1 (stable) by Squiz (http://www.squiz.net)
-phpcbf - version 3.7.1 (stable) by Squiz (http://www.squiz.net)
+- phpcs - version 3.7.1 (stable) 
+- phpcbf - version 3.7.1 (stable)
 
 ---
 #### Option A. Setup Code Formatting in VSCode
@@ -39,7 +42,7 @@ Ensure you are using these workspace settings:
 `/.vscode/folded-pages.code-workspace`
 
 ##### 4. Override/Modify formatting rules:
-To adjust code formatting rules, use the `phpcs.xml` file in the root of the project
+To adjust code formatting rules, modify the `phpcs.xml` file in the root of the project
 
 ---
 #### Option B. Setup Code Formatting Globally:
