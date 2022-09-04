@@ -1,11 +1,12 @@
 <?php
 /**
  * Plugin Name:     Folded Pages
- * Description:     Lightweight plugin that nests child pages for efficient wp-admin page management
+ * Plugin URI:      https://github.com/EarthmanWeb/folded-pages
+ * Description:     A lightweight WordPress plugin to view hierarchical pages more efficiently in the WP-Admin page listing
  * Author:          Earthman Media - Terrance Orletsky
  * Author URI:      earthmanmedia.com
  * Text Domain:     folded-pages
- * Version:         2.0.3
+ * Version:         2.0.4
  *
  * @package         Folded_Pages
  */
