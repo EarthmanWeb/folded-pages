@@ -1,3 +1,5 @@
 wpcs export-ignore
 .vscode export-ignore
 phpcs.xml export-ignore
+.wordpress-org export-ignore
+.github export-ignore

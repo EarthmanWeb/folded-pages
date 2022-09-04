@@ -1,0 +1,5 @@
+wpcs
+.vscode
+phpcs.xml
+.wordpress-org
+.github
