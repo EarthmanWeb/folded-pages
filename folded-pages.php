@@ -5,7 +5,7 @@
  * Author:          Earthman Media - Terrance Orletsky
  * Author URI:      earthmanmedia.com
  * Text Domain:     folded-pages
- * Version:         1.0.0
+ * Version:         1.0.1
  *
  * @package         Folded_Pages
  */
