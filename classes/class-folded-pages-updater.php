@@ -183,6 +183,8 @@ class Folded_Pages_Updater {
 			if ( $checked ) { // Did WordPress check for updates?
 
 				$this->get_repository_info(); // Get the repo info.
+				// em_log( 'checked basename', $checked[ $this->basename ], 1 );
+				// em_log( 'response', $this->github_response, 1 );
 
 				$out_of_date = version_compare( $this->github_response['tag_name'], $checked[ $this->basename ], 'gt' ); // Check if we're out of date...
 
@@ -199,7 +201,11 @@ class Folded_Pages_Updater {
 						'new_version' => $this->github_response['tag_name'],
 					);
 
+					// em_log( 'plugin', $plugin, 1, 1 );
+
 					$transient->response[ $this->basename ] = (object) $plugin; // Return it in response.
+					return $transient->response[ $this->basename ];
+
 				}
 			}
 		}
