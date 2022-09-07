@@ -9,3 +9,6 @@ composer.lock
 phpunit.xml
 phpcs.xml
 .phpcs.xml
+wpcs
+PHPCSExtra
+PHPCSUtils

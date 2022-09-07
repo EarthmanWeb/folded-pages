@@ -87,6 +87,7 @@ To adjust code formatting rules, use the `phpcs.xml` file in the root of the pro
 ```
 // change the path below to the correct one for your machine
 cd /path/to/plugins/folded-pages/
+git clone git@github.com:WordPress-Coding-Standards/WordPress-Coding-Standards.git ./wpcs
 cd wpcs
 composer install
 ```
@@ -96,7 +97,6 @@ composer install
 cd /path/to/plugins/folded-pages/
 
 // Clone a copy of the standards sniffers into your home (or modify paths to suit)
-git clone git@github.com:WordPress-Coding-Standards/WordPress-Coding-Standards.git ./wpcs
 git clone git@github.com:PHPCSStandards/PHPCSExtra.git ./PHPCSExtra
 git clone git@github.com:PHPCSStandards/PHPCSUtils.git ./PHPCSUtils
 cd wpcs
