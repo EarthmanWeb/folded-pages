@@ -18,7 +18,9 @@
 		"phpcbf.onsave": true,
 		"phpcbf.standard": "WordPress-Extra",
 		"phpcs.standard": "WordPress-Extra",
-		"phpcs.executablePath": "./wpcs/vendor/bin/phpcs",
-		"phpcbf.executablePath": "./wpcs/vendor/bin/phpcbf",
+		// "phpcs.executablePath": "./wpcs/vendor/bin/phpcs",
+		// "phpcbf.executablePath": "./wpcs/vendor/bin/phpcbf",
+		"phpcs.executablePath": "/Users/torletsky/wpcs/vendor/bin/phpcs",
+		"phpcbf.executablePath": "/Users/torletsky/wpcs/vendor/bin/phpcbf",
 	}
 }
