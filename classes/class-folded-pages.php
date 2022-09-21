@@ -40,48 +40,60 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_list_show_parent_pages_only( $query ) {
 			global $pagenow;
+			$parent_page = ! empty( sanitize_text_field( $_REQUEST['parent_page'] ) ) ? sanitize_text_field( $_REQUEST['parent_page'] ) : null;
+			$post_status = ! empty( sanitize_text_field( $_REQUEST['post_status'] ) ) ? sanitize_text_field( $_REQUEST['post_status'] ) : null;
+			$author      = ! empty( sanitize_text_field( $_REQUEST['author'] ) ) ? sanitize_text_field( $_REQUEST['author'] ) : null;
+			$orderby     = ! empty( sanitize_text_field( $_REQUEST['orderby'] ) ) ? sanitize_text_field( $_REQUEST['orderby'] ) : null;
+			$order       = ! empty( sanitize_text_field( $_REQUEST['order'] ) ) ? sanitize_text_field( $_REQUEST['order'] ) : null;
+
 			if ( 'edit.php' !== $pagenow ||
 			empty( $query->query_vars['post_type'] ) ||
 			'page' !== $query->query_vars['post_type'] ||
 			! empty( $query->query_vars['post_parent'] ) ||
-			( ! empty( $_GET['post_status'] ) && 'trash' === $_GET['post_status'] ) ||
-			! empty( $_GET['author'] )
+			( ! empty( $post_status ) && 'trash' === $post_status ) ||
+			! empty( $author )
 				) {
 					return;
 			}
-			$parent_page = ! empty( $_GET['parent_page'] ) ? $_GET['parent_page'] : null;
+
 			if ( current_user_can( 'edit_others_pages' ) && empty( $query->query_vars['post_parent'] ) && empty( $parent_page ) ) {
 				$query->set( 'post_parent', 0 );
 				$query->set( 'parent_page', 'root' );
 				$parent_page = 'root';
 			}
+
 			if ( 'root' === $parent_page ) {
 				$query->set( 'post_parent', 0 );
 			}
+
 			if ( 'all' === $parent_page ) {
 				$query->unset( 'post_parent' );
 			}
+
 			if ( ! empty( $parent_page ) && is_numeric( $parent_page ) ) {
 				$query->set( 'post_parent', $parent_page );
 			}
 
 			// set default sort options.
-			if ( empty( $_GET['orderby'] ) ) {
+			if ( empty( $orderby ) ) {
 				$query->set( 'orderby', 'title' );
 			}
-			if ( empty( $_GET['order'] ) ) {
+
+			if ( empty( $order ) ) {
 				$query->set( 'order', 'ASC' );
 			}
 		}
 
 		/**
-		 * Adds a select dropdown to filter the pages in the wpp-admin
+		 * Adds a select dropdown to filter the pages in the wp-admin
 		 *
 		 * @param String $post_type The post type being edited.
 		 * @return output
 		 */
 		public function folded_pages_list_filter_by_parent_page( $post_type ) {
 			global $pagenow;
+			$parent_page = ! empty( sanitize_text_field( $_REQUEST['parent_page'] ) ) ? sanitize_text_field( $_REQUEST['parent_page'] ) : null;
+
 			if ( 'edit.php' !== $pagenow || 'page' !== $post_type ) {
 				return;
 			}
@@ -90,23 +102,26 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 			$option_current = '';
 			$option_up      = '';
 			$parent_id      = 0;
-			if ( ! empty( $_GET['parent_page'] ) ) {
-				$current   = $_GET['parent_page'];
+			if ( isset( $parent_page ) ) {
+				$current   = $parent_page;
 				$parent_id = $current;
 				if ( 'root' !== $current && 'all' !== $current ) {
 					$current_page   = get_post( $current );
 					$option_up      = ' <option value="' . $current_page->post_parent . '">' . __( 'Up One Level', 'folded-pages' ) . '</option>';
-					$option_current = ' <option value="' . $current . '" selected="selected">' . $current_page->post_title . '</option>';
+					$option_current = ' <option value="' . $current . '" selected>- ' . $current_page->post_title . '</option>';
 				}
 			} else {
-				$current = 'all';
+				$current = 'root';
 			}
 
-			$default_text = __( 'Any parent (all pages)', 'folded-pages' );
-			$select       = '
-			<select name="parent_page" onChange="this.form.submit();" >
-			<option value="all"' . ( ( 'all' === $current ) ? ' selected="selected"' : '' ) . '>' . $default_text . '</option >
-			<option value="root"' . ( ( 'root' === $current ) ? ' selected="selected"' : '' ) . ' > ' . __( 'Root Level pages only', 'folded-pages' ) . '</option>' . $option_up . $option_current;
+			$default_text  = __( 'Any parent (all pages)', 'folded-pages' );
+			$all_selected  = 'all' === $current ? ' selected' : '';
+			$root_selected = 'root' === $current ? ' selected' : '';
+			$select        = '
+			<select id="folded-pages-filter" name="parent_page" onChange="this.form.submit();" >
+			<option value="" disabled>' . __( 'Filter pages by page parent:', 'folded-pages' ) . '</option >
+			<option value="all"' . $all_selected . '>' . $default_text . '</option >
+			<option value="root"' . $root_selected . ' > ' . __( 'Root Level pages', 'folded-pages' ) . '</option>' . $option_up . $option_current;
 
 			$pages = get_pages(
 				'parent=' . $parent_id . ' & order_by=ID,
@@ -115,13 +130,13 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 
 			$tree = array();
 			foreach ( $pages as $page ) {
-				$indent  = '';
+				$indent  = '-';
 				$parent  = $page->post_parent;
 				$page_id = $page->ID;
 				if ( ! $parent ) {
 					$tree[ $page_id ] = $page_id;
 				} elseif ( ! empty( array_keys( $tree ) ) && in_array( $parent, array_keys( $tree ) ) ) {
-					$indent .= '-';
+					$indent .= '--';
 					if ( ! is_array( $tree[ $parent ] ) ) {
 						$tree[ $parent ] = array();
 					}
@@ -132,8 +147,9 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 				);
 				$num_children = count( $children );
 				if ( $num_children ) {
+
 					$option  = '<option value="' . $page_id . '" ';
-					$option .= ( $page_id === (int) $current ) ? ' selected="selected"' : '';
+					$option .= ( $current === $page_id ) ? ' selected="selected"' : '';
 					$option .= '>';
 					$option .= $indent . ' ' . $page->post_title;
 					if ( current_user_can( 'manage_options' ) ) {
@@ -144,10 +160,27 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 				}
 			}
 
-				$select .= '
+				$select      .= '
 				</select>';
-				$output  = apply_filters( 'folded_pages_list_filter_by_parent_page_output', $select );
-				echo $output;
+				$output       = apply_filters( 'folded_pages_list_filter_by_parent_page_output', $select );
+				$allowed_html = array(
+					'select' => array(
+						'id'       => array(),
+						'name'     => array(),
+						'onChange' => array(),
+					),
+					'option' => array(
+						'value'    => array(),
+						'selected' => array(),
+						'disabled' => array(),
+					),
+					'script' => array(
+						'type' => array(),
+						'id'   => array(),
+					),
+				);
+				$output      .= '<script type="text/javascript" id="folded-pages-list-filter-activate">jQuery( "#folded-pages-filter" ).change(function() {  jQuery( "#posts-filter").submit(); });</script>';
+				echo wp_kses( $output, $allowed_html );
 		}
 
 		/**
@@ -158,20 +191,25 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_clear_filters_button( $which ) {
 			global $pagenow;
+
+			$post_type     = ! empty( sanitize_text_field( $_REQUEST['post_type'] ) ) ? sanitize_text_field( $_REQUEST['post_type'] ) : null;
+			$s             = ! empty( sanitize_text_field( $_REQUEST['s'] ) ) ? sanitize_text_field( $_REQUEST['s'] ) : null;
+			$content_group = ! empty( sanitize_text_field( $_REQUEST['content_group'] ) ) ? sanitize_text_field( $_REQUEST['content_group'] ) : null;
+
 			if ( 'edit.php' !== $pagenow || 'top' !== $which ) {
 				return;
 			}
-			if ( empty( $_GET['post_type'] ) ) {
+			if ( empty( $post_type ) ) {
 				$post_type = 'post';
 			} else {
-				$post_type = $_GET['post_type'];
+				$post_type = $post_type;
 			}
-			$this_url = '/wp-admin/edit.php?post_type=' . $_GET['post_type'];
-			$class    = ( isset( $_GET['s'] ) || isset( $_GET['content_group'] ) ) ? 'button-primary' : 'button';
+			$this_url = '/wp-admin/edit.php?post_type=' . $post_type;
+			$class    = ( isset( $s ) || isset( $content_group ) ) ? 'button-primary' : 'button';
 
 			$output_html = '<div class="alignleft actions"><a type="button" name="filter_clear_all" id="post-query-clear" class="' . $class . '" value="Clear All" href="' . $this_url . '">Clear All Filters</a></div>';
 			$output      = apply_filters( 'folded_pages_clear_filter_button_output', $output_html );
-			echo $output;
+			echo wp_kses_post( $output );
 		}
 
 		/**
@@ -203,14 +241,17 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 * @return Array the altered columns.
 		 */
 		public function folded_pages_columns_order( $columns ) {
-			if ( ! empty( $_GET['parent_page'] ) && 'all' !== $_GET['parent_page'] ) {
-				if ( 'root' === $_GET['parent_page'] || 0 === $_GET['parent_page'] || ! empty( $_GET['parent_page_base'] ) ) {
+			$parent_page      = ! empty( sanitize_text_field( $_REQUEST['parent_page'] ) ) ? sanitize_text_field( $_REQUEST['parent_page'] ) : null;
+			$parent_page_base = ! empty( sanitize_text_field( $_REQUEST['parent_page_base'] ) ) ? sanitize_text_field( $_REQUEST['parent_page_base'] ) : null;
+
+			if ( isset( $parent_page ) && 'all' !== $parent_page && 'root' !== $parent_page ) {
+				if ( 0 === $parent_page || ! empty( $parent_page_base ) ) {
 					$page_up_link = add_query_arg( 'parent_page', 'all' );
 				} else {
-					$grand_parent_page_id = wp_get_post_parent_id( $_GET['parent_page'] );
+					$grand_parent_page_id = wp_get_post_parent_id( $parent_page );
 					$page_up_link         = add_query_arg( 'parent_page', $grand_parent_page_id );
 				}
-				$column_header = "<a href='$page_up_link' title='" . __( 'Back to Parent Pages', 'folded-pages' ) . "'><i class='dashicons dashicons-exit'></i></a>";
+				$column_header = "<a href='$page_up_link' title='" . __( 'Move up one level', 'folded-pages' ) . "'><i class='dashicons dashicons-exit'></i></a>";
 			} else {
 				$column_header = "<a><i class='dashicons dashicons-admin-page' title='" . __( 'Child pages count + filter', 'folded-pages' ) . "'></i></a>";
 			}
@@ -240,12 +281,13 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 				if ( $child_pages_count > 0 ) {
 					$link_params = '?s&post_status=all&post_type=page&parent_page=' . $post_id;
 					$title_text  = __( 'View Child Page(s)', 'folded-pages' );
-					echo "<a href='/wp-admin/edit.php$link_params' title='$title_text'>";
-					echo $child_pages_count . '<br/> ';
-					echo "<i class='dashicons dashicons-arrow-down-alt2' /></a>";
+					$output      = "<a href='/wp-admin/edit.php$link_params' title='$title_text'>";
+					$output     .= $child_pages_count . '<br/> ';
+					$output     .= "<i class='dashicons dashicons-arrow-down-alt2' /></a>";
 				} else {
-					echo '';
+					$output = '';
 				}
+				echo wp_kses_post( $output );
 			}
 		}
 
@@ -256,7 +298,9 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_child_pages_column_css() {
 			global $pagenow;
-			if ( 'edit.php' !== $pagenow || empty( $_GET['post_type'] ) || 'page' !== $_GET['post_type'] ) {
+			$post_type = ! empty( sanitize_text_field( $_REQUEST['post_type'] ) ) ? sanitize_text_field( $_REQUEST['post_type'] ) : null;
+
+			if ( 'edit.php' !== $pagenow || empty( $post_type ) || 'page' !== $post_type ) {
 				return;
 			}
 			echo '<style id="child-pages-column-css">

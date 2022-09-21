@@ -4,7 +4,7 @@ Donate link: https://earthmanmedia.com
 Tags: wp-admin, page-management
 Requires at least: 3.5
 Tested up to: 6.0
-Stable tag:  2.0.4
+Stable tag:  2.0.6
 Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -94,6 +94,12 @@ To adjust code formatting rules, use the `phpcs.xml` file in the root of the pro
 
 
 == Changelog ==
+
+= 2.0.6 =
+* Added data sanitization.
+
+= 2.0.5 =
+* Removed updater and vscode format files.
 
 = 2.0.4 =
 * Added docs and WP Repo readme.
