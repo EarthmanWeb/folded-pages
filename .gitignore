@@ -12,3 +12,4 @@ phpcs.xml
 wpcs
 PHPCSExtra
 PHPCSUtils
+.vscode
