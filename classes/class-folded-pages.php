@@ -40,11 +40,11 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_list_show_parent_pages_only( $query ) {
 			global $pagenow;
-			$parent_page = ! empty( sanitize_text_field( $_REQUEST['parent_page'] ) ) ? sanitize_text_field( $_REQUEST['parent_page'] ) : null;
-			$post_status = ! empty( sanitize_text_field( $_REQUEST['post_status'] ) ) ? sanitize_text_field( $_REQUEST['post_status'] ) : null;
-			$author      = ! empty( sanitize_text_field( $_REQUEST['author'] ) ) ? sanitize_text_field( $_REQUEST['author'] ) : null;
-			$orderby     = ! empty( sanitize_text_field( $_REQUEST['orderby'] ) ) ? sanitize_text_field( $_REQUEST['orderby'] ) : null;
-			$order       = ! empty( sanitize_text_field( $_REQUEST['order'] ) ) ? sanitize_text_field( $_REQUEST['order'] ) : null;
+			$parent_page = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
+			$post_status = ! empty( sanitize_text_field( $_GET['post_status'] ) ) ? sanitize_text_field( $_GET['post_status'] ) : null;
+			$author      = ! empty( sanitize_text_field( $_GET['author'] ) ) ? sanitize_text_field( $_GET['author'] ) : null;
+			$orderby     = ! empty( sanitize_text_field( $_GET['orderby'] ) ) ? sanitize_text_field( $_GET['orderby'] ) : null;
+			$order       = ! empty( sanitize_text_field( $_GET['order'] ) ) ? sanitize_text_field( $_GET['order'] ) : null;
 
 			if ( 'edit.php' !== $pagenow ||
 			empty( $query->query_vars['post_type'] ) ||
@@ -92,7 +92,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_list_filter_by_parent_page( $post_type ) {
 			global $pagenow;
-			$parent_page = ! empty( sanitize_text_field( $_REQUEST['parent_page'] ) ) ? sanitize_text_field( $_REQUEST['parent_page'] ) : null;
+			$parent_page = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
 
 			if ( 'edit.php' !== $pagenow || 'page' !== $post_type ) {
 				return;
@@ -192,9 +192,9 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		public function folded_pages_clear_filters_button( $which ) {
 			global $pagenow;
 
-			$post_type     = ! empty( sanitize_text_field( $_REQUEST['post_type'] ) ) ? sanitize_text_field( $_REQUEST['post_type'] ) : null;
-			$s             = ! empty( sanitize_text_field( $_REQUEST['s'] ) ) ? sanitize_text_field( $_REQUEST['s'] ) : null;
-			$content_group = ! empty( sanitize_text_field( $_REQUEST['content_group'] ) ) ? sanitize_text_field( $_REQUEST['content_group'] ) : null;
+			$post_type     = ! empty( sanitize_text_field( $_GET['post_type'] ) ) ? sanitize_text_field( $_GET['post_type'] ) : null;
+			$s             = ! empty( sanitize_text_field( $_GET['s'] ) ) ? sanitize_text_field( $_GET['s'] ) : null;
+			$content_group = ! empty( sanitize_text_field( $_GET['content_group'] ) ) ? sanitize_text_field( $_GET['content_group'] ) : null;
 
 			if ( 'edit.php' !== $pagenow || 'top' !== $which ) {
 				return;
@@ -241,8 +241,8 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 * @return Array the altered columns.
 		 */
 		public function folded_pages_columns_order( $columns ) {
-			$parent_page      = ! empty( sanitize_text_field( $_REQUEST['parent_page'] ) ) ? sanitize_text_field( $_REQUEST['parent_page'] ) : null;
-			$parent_page_base = ! empty( sanitize_text_field( $_REQUEST['parent_page_base'] ) ) ? sanitize_text_field( $_REQUEST['parent_page_base'] ) : null;
+			$parent_page      = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
+			$parent_page_base = ! empty( sanitize_text_field( $_GET['parent_page_base'] ) ) ? sanitize_text_field( $_GET['parent_page_base'] ) : null;
 
 			if ( isset( $parent_page ) && 'all' !== $parent_page && 'root' !== $parent_page ) {
 				if ( 0 === $parent_page || ! empty( $parent_page_base ) ) {
@@ -298,7 +298,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_child_pages_column_css() {
 			global $pagenow;
-			$post_type = ! empty( sanitize_text_field( $_REQUEST['post_type'] ) ) ? sanitize_text_field( $_REQUEST['post_type'] ) : null;
+			$post_type = ! empty( sanitize_text_field( $_GET['post_type'] ) ) ? sanitize_text_field( $_GET['post_type'] ) : null;
 
 			if ( 'edit.php' !== $pagenow || empty( $post_type ) || 'page' !== $post_type ) {
 				return;
