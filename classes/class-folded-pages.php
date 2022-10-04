@@ -259,7 +259,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 			$n_columns = array();
 			foreach ( $columns as $key => $value ) {
 				if ( $key == $before ) {
-					$n_columns['children'] = $column_header;
+					$n_columns['folded-pages'] = $column_header;
 				}
 				$n_columns[ $key ] = $value;
 			}
@@ -274,7 +274,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 * @return void
 		 */
 		public function folded_pages_child_pages_column( $column_key, $post_id ) {
-			if ( 'children' === $column_key ) {
+			if ( 'folded-pages' === $column_key ) {
 				global $wpdb;
 				// check if there are children to this page...
 				$child_pages_count = $this->folded_pages_get_child_page_count( $post_id );
@@ -304,11 +304,11 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 				return;
 			}
 			echo '<style id="child-pages-column-css">
-				.manage-column.column-children {
+				.manage-column.column-folded-pages {
 					text-align: center;
 					width: 2.2em;
 				}
-				td.children.column-children {
+				td.folded-pages.column-folded-pages {
 					text-align: center;
 					vertical-align: top;
 					line-height: 1.3em;
