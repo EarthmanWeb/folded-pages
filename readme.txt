@@ -4,7 +4,7 @@ Donate link: https://earthmanmedia.com
 Tags: wp-admin, page-management
 Requires at least: 3.5
 Tested up to: 6.0
-Stable tag:  2.0.6
+Stable tag:  2.1.0
 Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -92,8 +92,30 @@ Ensure you are using these workspace settings:
 ##### 6. (optional) Override/Modify formatting rules:
 To adjust code formatting rules, use the `phpcs.xml` file in the root of the project
 
+== Screenshots ==
+
+1. This is a screenshot description
+2. This is a description for the second screenshot
+
+== Frequently Asked Questions ==
+
+= Where is the settings page for this plugin? =
+There is no admin panel settings page.  Due to the simplicity of the plugin, nothing is required beyond installing and activating the plugin.
+
+== Upgrade Notice ==
+
+= 2.1.0 =
+This is the initial SVN deployment - hope you enjoy this offering!
 
 == Changelog ==
+
+= 2.0.7 =
+* Namespaced css classes.
+* Fixes to page ordering for compatibility with Intuitive CPO plugin.
+* Fixes filtering defaults when using core text search.
+* Removes spaces from child page context links.
+* Adds indentation hyphen for sub-pages in dropdown.
+* Updates screenshots and readme.
 
 = 2.0.6 =
 * Added data sanitization.

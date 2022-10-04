@@ -40,12 +40,14 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_list_show_parent_pages_only( $query ) {
 			global $pagenow;
-			$parent_page = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
-			$post_status = ! empty( sanitize_text_field( $_GET['post_status'] ) ) ? sanitize_text_field( $_GET['post_status'] ) : null;
-			$author      = ! empty( sanitize_text_field( $_GET['author'] ) ) ? sanitize_text_field( $_GET['author'] ) : null;
-			$orderby     = ! empty( sanitize_text_field( $_GET['orderby'] ) ) ? sanitize_text_field( $_GET['orderby'] ) : null;
-			$order       = ! empty( sanitize_text_field( $_GET['order'] ) ) ? sanitize_text_field( $_GET['order'] ) : null;
+			$parent_page = ! empty( $_GET['parent_page'] ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
+			$post_status = ! empty( $_GET['post_status'] ) ? sanitize_text_field( $_GET['post_status'] ) : null;
+			$author      = ! empty( $_GET['author'] ) ? sanitize_text_field( $_GET['author'] ) : null;
+			$orderby     = ! empty( $_GET['orderby'] ) ? sanitize_text_field( $_GET['orderby'] ) : null;
+			$order       = ! empty( $_GET['order'] ) ? sanitize_text_field( $_GET['order'] ) : null;
+			$search      = ! empty( $_GET['s'] ) ? sanitize_text_field( $_GET['s'] ) : null;
 
+			// only activate for the page list.
 			if ( 'edit.php' !== $pagenow ||
 			empty( $query->query_vars['post_type'] ) ||
 			'page' !== $query->query_vars['post_type'] ||
@@ -56,29 +58,36 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 					return;
 			}
 
-			if ( current_user_can( 'edit_others_pages' ) && empty( $query->query_vars['post_parent'] ) && empty( $parent_page ) ) {
-				$query->set( 'post_parent', 0 );
+			// set default to show root pages only.
+			if ( current_user_can( 'edit_others_pages' ) && empty( $query->query_vars['post_parent'] ) && empty( $parent_page ) && empty( $search ) ) {
 				$query->set( 'parent_page', 'root' );
 				$parent_page = 'root';
+			}
+
+			// set default for text searches to show all pages.
+			if ( current_user_can( 'edit_others_pages' ) && empty( $query->query_vars['post_parent'] ) && empty( $parent_page ) && ! empty( $search ) ) {
+				$query->set( 'parent_page', 'all' );
+				$parent_page = 'all';
 			}
 
 			if ( 'root' === $parent_page ) {
 				$query->set( 'post_parent', 0 );
 			}
 
+			// show all pages (this is the system default).
 			if ( 'all' === $parent_page ) {
 				$query->unset( 'post_parent' );
 			}
 
+			// set to show child pages of the selected parent page.
 			if ( ! empty( $parent_page ) && is_numeric( $parent_page ) ) {
 				$query->set( 'post_parent', $parent_page );
 			}
 
 			// set default sort options.
 			if ( empty( $orderby ) ) {
-				$query->set( 'orderby', 'title' );
+				$query->set( 'orderby', 'menu_order' );
 			}
-
 			if ( empty( $order ) ) {
 				$query->set( 'order', 'ASC' );
 			}
@@ -118,32 +127,28 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 			$all_selected  = 'all' === $current ? ' selected' : '';
 			$root_selected = 'root' === $current ? ' selected' : '';
 			$select        = '
-			<select id="folded-pages-filter" name="parent_page" onChange="this.form.submit();" >
+			<select id="folded-pages-filter" name="parent_page" >
 			<option value="" disabled>' . __( 'Filter pages by page parent:', 'folded-pages' ) . '</option >
 			<option value="all"' . $all_selected . '>' . $default_text . '</option >
 			<option value="root"' . $root_selected . ' > ' . __( 'Root Level pages', 'folded-pages' ) . '</option>' . $option_up . $option_current;
 
+			$all_statuses = 'publish,future,draft,pending,inherit';
+
 			$pages = get_pages(
-				'parent=' . $parent_id . ' & order_by=ID,
-			post_parent'
+				'post_status=' . $all_statuses . '&parent=' . $parent_id . ' & order_by=menu_order,post_parent'
 			);
 
 			$tree = array();
 			foreach ( $pages as $page ) {
-				$indent  = '-';
-				$parent  = $page->post_parent;
-				$page_id = $page->ID;
-				if ( ! $parent ) {
-					$tree[ $page_id ] = $page_id;
-				} elseif ( ! empty( array_keys( $tree ) ) && in_array( $parent, array_keys( $tree ) ) ) {
-					$indent .= '--';
-					if ( ! is_array( $tree[ $parent ] ) ) {
-						$tree[ $parent ] = array();
-					}
-					$tree[ $parent ][ $page_id ] = $page_id;
+				$indent           = '-';
+				$parent           = $page->post_parent;
+				$page_id          = $page->ID;
+				$tree[ $page_id ] = $page_id;
+				if ( is_numeric( $current ) ) {
+					$indent .= '-';
 				}
 				$children     = get_pages(
-					'parent=' . $page_id . '&order=ID,post_parent'
+					'post_status=' . $all_statuses . '&parent=' . $page_id . '&order=menu_order,post_parent'
 				);
 				$num_children = count( $children );
 				if ( $num_children ) {
@@ -192,9 +197,9 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		public function folded_pages_clear_filters_button( $which ) {
 			global $pagenow;
 
-			$post_type     = ! empty( sanitize_text_field( $_GET['post_type'] ) ) ? sanitize_text_field( $_GET['post_type'] ) : null;
-			$s             = ! empty( sanitize_text_field( $_GET['s'] ) ) ? sanitize_text_field( $_GET['s'] ) : null;
-			$content_group = ! empty( sanitize_text_field( $_GET['content_group'] ) ) ? sanitize_text_field( $_GET['content_group'] ) : null;
+			$post_type   = ! empty( sanitize_text_field( $_GET['post_type'] ) ) ? sanitize_text_field( $_GET['post_type'] ) : null;
+			$s           = ! empty( sanitize_text_field( $_GET['s'] ) ) ? sanitize_text_field( $_GET['s'] ) : null;
+			$parent_page = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
 
 			if ( 'edit.php' !== $pagenow || 'top' !== $which ) {
 				return;
@@ -205,7 +210,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 				$post_type = $post_type;
 			}
 			$this_url = '/wp-admin/edit.php?post_type=' . $post_type;
-			$class    = ( isset( $s ) || isset( $content_group ) ) ? 'button-primary' : 'button';
+			$class    = ( isset( $s ) || isset( $parent_page ) ) ? 'button-primary' : 'button';
 
 			$output_html = '<div class="alignleft actions"><a type="button" name="filter_clear_all" id="post-query-clear" class="' . $class . '" value="Clear All" href="' . $this_url . '">Clear All Filters</a></div>';
 			$output      = apply_filters( 'folded_pages_clear_filter_button_output', $output_html );
@@ -226,7 +231,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 				$child_page_count = $this->folded_pages_get_child_page_count( $post->ID );
 				if ( $child_page_count > 0 ) {
 					// Children exist-Show the link...
-					$link_params          = ' ? s & post_status=all & post_type=page & parent_page=' . $post->ID;
+					$link_params          = ' ?s&post_status=all&post_type=page&parent_page=' . $post->ID;
 					$child_link_text      = __( 'View Child Page(s)', 'folded-pages' );
 					$actions['view-tree'] = apply_filters( 'folded_pages_add_child_page_links_output', "<a href='/wp-admin/edit.php$link_params' title='$child_link_text'>$child_link_text</a>" );
 				}
@@ -241,8 +246,8 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 * @return Array the altered columns.
 		 */
 		public function folded_pages_columns_order( $columns ) {
-			$parent_page      = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
-			$parent_page_base = ! empty( sanitize_text_field( $_GET['parent_page_base'] ) ) ? sanitize_text_field( $_GET['parent_page_base'] ) : null;
+			$parent_page      = ! empty( $_GET['parent_page'] ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
+			$parent_page_base = ! empty( $_GET['parent_page_base'] ) ? sanitize_text_field( $_GET['parent_page_base'] ) : null;
 
 			if ( isset( $parent_page ) && 'all' !== $parent_page && 'root' !== $parent_page ) {
 				if ( 0 === $parent_page || ! empty( $parent_page_base ) ) {
@@ -298,7 +303,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_child_pages_column_css() {
 			global $pagenow;
-			$post_type = ! empty( sanitize_text_field( $_GET['post_type'] ) ) ? sanitize_text_field( $_GET['post_type'] ) : null;
+			$post_type = ! empty( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : null;
 
 			if ( 'edit.php' !== $pagenow || empty( $post_type ) || 'page' !== $post_type ) {
 				return;
