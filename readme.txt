@@ -4,21 +4,22 @@ Donate link: https://earthmanmedia.com
 Tags: wp-admin, page-management
 Requires at least: 3.5
 Tested up to: 6.0
-Stable tag:  2.1.0
+Stable tag:  2.1.1
 Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
-A lightweight WordPress plugin to view hierarchical pages more efficiently in the WP-Admin page listing.
+A lightweight WordPress plugin to filter and view hierarchical child pages more efficiently in the WP-Admin page listing.
 
 == Description ==
 
 ## How to Use:
 
 There are no settings / options, nor admin page.  
-You will see it in your wp-admin pages list, wherever you have nested pages.
 
-(see screenshots)
+You will see the new features added to your wp-admin pages list, wherever you have nested pages, in the left column, and also in the filters section in the pages admin panel..
+
+Please see the attached screenshots for instructions on how to use the plugin.
 
 #### Manual installation:
 

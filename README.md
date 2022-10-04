@@ -14,7 +14,10 @@ https://github.com/EarthmanWeb/folded-pages/releases
 - Activate
 
 There are no settings / options, nor admin page.  
-You will see it in your wp-admin pages list, wherever you have nested pages.
+
+You will see the new features added to your wp-admin pages list, wherever you have nested pages, in the left column, and also in the filters section in the pages admin panel..
+
+Please see the attached screenshots for instructions on how to use the plugin.
 
 ---
 
