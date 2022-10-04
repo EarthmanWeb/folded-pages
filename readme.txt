@@ -109,6 +109,9 @@ This is the initial SVN deployment - hope you enjoy this offering!
 
 == Changelog ==
 
+= 2.1.0 =
+* SVN release for Wordpress.org.
+
 = 2.0.7 =
 * Namespaced css classes.
 * Fixes to page ordering for compatibility with Intuitive CPO plugin.
