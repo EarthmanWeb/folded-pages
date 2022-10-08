@@ -101,7 +101,7 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		 */
 		public function folded_pages_list_filter_by_parent_page( $post_type ) {
 			global $pagenow;
-			$parent_page = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
+			$parent_page = ! empty( $_GET['parent_page'] ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
 
 			if ( 'edit.php' !== $pagenow || 'page' !== $post_type ) {
 				return;
@@ -197,9 +197,9 @@ if ( ! class_exists( 'Folded_Pages' ) ) {
 		public function folded_pages_clear_filters_button( $which ) {
 			global $pagenow;
 
-			$post_type   = ! empty( sanitize_text_field( $_GET['post_type'] ) ) ? sanitize_text_field( $_GET['post_type'] ) : null;
-			$s           = ! empty( sanitize_text_field( $_GET['s'] ) ) ? sanitize_text_field( $_GET['s'] ) : null;
-			$parent_page = ! empty( sanitize_text_field( $_GET['parent_page'] ) ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
+			$post_type   = ! empty( $_GET['post_type'] ) ? sanitize_text_field( $_GET['post_type'] ) : null;
+			$s           = ! empty( $_GET['s'] ) ? sanitize_text_field( $_GET['s'] ) : null;
+			$parent_page = ! empty( $_GET['parent_page'] ) ? sanitize_text_field( $_GET['parent_page'] ) : null;
 
 			if ( 'edit.php' !== $pagenow || 'top' !== $which ) {
 				return;
