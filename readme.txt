@@ -6,7 +6,7 @@ Donate link: https://earthmanmedia.com
 Tags: wp-admin, page-management
 Requires at least: 3.5
 Tested up to: 6.0
-Stable tag:  2.1.4
+Stable tag:  2.1.5
 Requires PHP: 7.0
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -50,6 +50,9 @@ https://github.com/EarthmanWeb/folded-pages/releases
 There is no admin panel settings page.  Due to the simplicity of the plugin, nothing is required beyond installing and activating the plugin.
 
 == Upgrade Notice ==
+
+= 2.1.5 =
+Miscellaneous fixes to remove PHP notices
 
 = 2.1.0 =
 This is the initial SVN deployment - hope you enjoy this offering!
