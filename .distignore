@@ -3,3 +3,4 @@ wpcs
 phpcs.xml
 .wordpress-org
 .github
+.git
